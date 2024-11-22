@@ -14,7 +14,6 @@ namespace Uniqlo
             builder.Services.AddDbContext<UniqloDbContest>(opt =>
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("MSSQL"));
-
             });
 
             var app = builder.Build();

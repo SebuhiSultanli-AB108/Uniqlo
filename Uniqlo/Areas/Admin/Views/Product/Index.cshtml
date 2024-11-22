@@ -1,0 +1,75 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+    .container {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3, container">
+        <h6 class="m-0 font-weight-bold text-primary, item">Products</h6>
+        <a class="item, btn btn-primary" href="../Admin/Product/Create">Create</a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>CoverImage</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>BuyPrice</th>
+                        <th>SellPrice</th>
+                        <th>Discount</th>
+                        <th>Brand</th>
+                        <th>CreatedTime</th>
+                        <th>IsDeleted</th>
+                        <th colspan="2">Actions</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) 
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td><img style="max-width: 64px; max-height: 64px;" src="~/imgs/products/@item.CoverImage" alt="Alternate Text" /></td>
+                            <td>@item.Name</td>
+                            <td style="min-width: 250px">@item.Description</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.BuyPrice</td>
+                            <td>@item.SellPrice</td>
+                            <td>@item.Discount</td>
+                            <td>@item.Brand.Name</td>
+                            <td style="min-width: 225px">@item.CreatedTime</td>
+                            <td>@item.IsDeleted</td>
+                            <td>
+                                <a
+                                    class="btn btn-success"
+                                    asp-action="Update" asp-route-id="@item.Id"
+                                >
+                                    Update
+                                </a>
+                            </td>
+                            <td>
+                                <a
+                                    class="btn btn-danger" 
+                                    asp-action="Delete" asp-route-id="@item.Id"
+                                >
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

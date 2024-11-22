@@ -1,0 +1,60 @@
+﻿@model ProductCreateVM
+@{
+    ViewData["Title"] = "Update";
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Update</h6>
+    </div>
+    <div class="card-body">
+        <form enctype="multipart/form-data" method="post">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input class="form-control" asp-for="Name">
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <input class="form-control" asp-for="Description">
+                <span class="text-danger" asp-validation-for="Description"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="File"></label>
+                <input class="form-control" asp-for="File">
+                <span class="text-danger" asp-validation-for="File"></span>
+            </div>
+            <div class="form-row">
+                <label asp-for="BuyPrice"></label>
+                <input class="form-control" asp-for="BuyPrice">
+                <span class="text-danger" asp-validation-for="BuyPrice"></span>
+
+            </div>
+            <div class="form-row">
+                <label asp-for="SellPrice"></label>
+                <input class="form-control" asp-for="SellPrice">
+                <span class="text-danger" asp-validation-for="SellPrice"></span>
+
+            </div>
+            <div class="form-row">
+                <label asp-for="Quantity"></label>
+                <input class="form-control" asp-for="Quantity">
+                <span class="text-danger" asp-validation-for="Quantity"></span>
+
+            </div>
+            <div class="form-row">
+                <label asp-for="Discount"></label>
+                <input class="form-control" asp-for="Discount">
+                <span class="text-danger" asp-validation-for="Discount"></span>
+
+            </div>
+            <div class="form-row">
+                <label asp-for="BrandId">Brands</label>
+                <select class="form-control" asp-for="BrandId" asp-items='new SelectList(ViewBag.Categories, "Id", "Name")'></select>
+                <span class="text-danger" asp-validation-for="BrandId"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+

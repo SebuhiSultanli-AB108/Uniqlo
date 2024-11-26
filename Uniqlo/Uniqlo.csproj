@@ -21,7 +21,6 @@
     <Folder Include="wwwroot\assets\images\about\" />
     <Folder Include="wwwroot\assets\images\payment\" />
     <Folder Include="wwwroot\imgs\products\" />
-    <Folder Include="wwwroot\imgs\sliders\" />
   </ItemGroup>
 
 </Project>

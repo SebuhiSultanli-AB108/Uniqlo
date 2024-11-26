@@ -10,6 +10,8 @@ namespace Uniqlo.Areas.Admin.Controllers;
 [Area("Admin")]
 public class ProductController(IWebHostEnvironment _env, UniqloDbContest _context) : Controller
 {
+    int fileMaxSize = 400;
+
     public async Task<IActionResult> IndexAsync()
     {
         return View(await _context.Products
@@ -50,7 +52,6 @@ public class ProductController(IWebHostEnvironment _env, UniqloDbContest _contex
     {
         if (vm.File != null)
         {
-            int fileMaxSize = 400;
 
             if (!vm.File.IsValidType("image"))
                 ModelState.AddModelError("File", "File must be and image.");
@@ -82,6 +83,24 @@ public class ProductController(IWebHostEnvironment _env, UniqloDbContest _contex
             if (!vm.File.IsValidSize(fileMaxSize))
                 ModelState.AddModelError("File", $"File must be smaller than {fileMaxSize}KB.");
         }
+        if (vm.OtherFiles.Any())
+        {
+            if (!vm.OtherFiles.All(x => x.IsValidType("image")))
+            {
+                string fileNames =
+                    string.Join(',', vm.OtherFiles
+                    .Where(x => x.IsValidType("image"))
+                    .Select(x => x.FileName));
+                ModelState.AddModelError("OtherFiles", fileNames + " is not an image");
+            }
+            if (!vm.OtherFiles.All(x => x.IsValidSize(fileMaxSize)))
+            {
+                string fileNames =
+                   string.Join(',', vm.OtherFiles
+                   .Where(x => x.IsValidSize(fileMaxSize))
+                   .Select(x => x.FileName));
+            }
+        }
         if (!ModelState.IsValid) return View(vm);
         if (!await _context.Brands.AnyAsync(x => x.Id == vm.BrandId))
         {
@@ -97,7 +116,11 @@ public class ProductController(IWebHostEnvironment _env, UniqloDbContest _contex
         product.SellPrice = vm.SellPrice;
         product.Discount = vm.Discount;
         product.BrandId = vm.BrandId;
-
+        product.Images = vm.OtherFiles
+            .Select(x => new ProductImage
+            {
+                ImageUrl = x.UploadAsync(_env.WebRootPath, "imgs", "products").Result
+            }).ToList();
         _context.Products.Update(product);
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Create));

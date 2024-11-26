@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Uniqlo.Context;
 
@@ -11,9 +12,11 @@ using Uniqlo.Context;
 namespace Uniqlo.Migrations
 {
     [DbContext(typeof(UniqloDbContest))]
-    partial class UniqloDbContestModelSnapshot : ModelSnapshot
+    [Migration("20241126211342_createdimagestables2")]
+    partial class createdimagestables2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

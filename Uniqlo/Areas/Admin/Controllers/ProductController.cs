@@ -52,11 +52,17 @@ public class ProductController(IWebHostEnvironment _env, UniqloDbContest _contex
     {
         if (vm.File != null)
         {
-
             if (!vm.File.IsValidType("image"))
                 ModelState.AddModelError("File", "File must be and image.");
             if (!vm.File.IsValidSize(fileMaxSize))
                 ModelState.AddModelError("File", $"File must be smaller than {fileMaxSize}KB.");
+        }
+        if (vm.OtherFiles.Any())
+        {
+            if (!vm.OtherFiles.All(x => x.IsValidType("image")))
+                ModelState.AddModelError("OtherFiles", "One ore more images are not in image type!");
+            if (!vm.OtherFiles.All(x => x.IsValidSize(fileMaxSize)))
+                ModelState.AddModelError("OtherFiles", $"Files must be smaller than {fileMaxSize}KB.");
         }
         if (!ModelState.IsValid) return View(vm);
         if (!await _context.Brands.AnyAsync(x => x.Id == vm.BrandId))
@@ -66,6 +72,10 @@ public class ProductController(IWebHostEnvironment _env, UniqloDbContest _contex
         }
         Product product = vm;
         product.CoverImage = await vm.File!.UploadAsync(_env.WebRootPath, "imgs", "products");
+        product.Images = vm.OtherFiles.Select(x => new ProductImage
+        {
+            ImageUrl = x.UploadAsync(_env.WebRootPath, "imgs", "products").Result
+        }).ToList();
         await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Create));

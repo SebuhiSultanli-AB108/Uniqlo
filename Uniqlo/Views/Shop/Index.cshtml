@@ -1,0 +1,354 @@
+﻿@model ShopVM
+@{
+    ViewData["Title"] = "Index";
+}
+@section style{
+    <style>
+        .brand-input:checked + label
+        {
+            color:red;
+        }
+    </style>
+}
+<!-- Body main wrapper start -->
+<div class="wrapper fixed__footer">
+    <!-- Start Our ShopSide Area -->
+    <section class="htc__shop__sidebar bg__white ptb--120">
+        <div class="container">
+            <div class="row">
+                <form class="col-md-12 col-lg-3 order-lg-1 order-2 col-sm-12" asp-controller="Shop" asp-action="Index">
+                    <div class="htc__shop__left__sidebar">
+                        <!-- Start Range -->
+                        <div     class="htc-grid-range">
+                            <h4 class="section-title-4">FILTER BY PRICE</h4>
+                            <div class="content-shopby">
+                                <div class="price_filter s-filter clear">
+                                    <div action="#" method="GET">
+                                        <div id="slider-range"></div>
+                                        <div class="slider__range--output">
+                                            <div class="price__output--wrap">
+                                                <div class="price--output">
+                                                    
+                                                    <span>Price :</span><input name="amount" type="text" id="amount" readonly>
+                                                </div>
+                                                <div class="price--filter">
+                                                    <button class="btn">Filter</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Range -->
+                        <!-- Start Product Cat -->
+                        <div class="htc__shop__cat">
+                            <h4 class="section-title-4">PRODUCT CATEGORIES</h4>
+                            <ul class="sidebar__list">
+                                <li>
+                                    <input name="brandId" class="d-none brand-input" type="radio" id="brand-0" />
+                                    <label style="cursor:pointer" class="d-flex justify-content-between" for="brand-0">All<span></span></label>
+                                </li>
+                                @foreach (var item in Model.Brands)
+                                {
+                                    <li>
+                                        <input name="brandId" class="d-none brand-input" type="radio" value="@item.Id" id="brand-@item.Id"/>
+                                        <label style="cursor:pointer" class="d-flex justify-content-between" for="brand-@item.Id">@item.Name<span>@item.Count</span></label>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <!-- End Product Cat -->
+                       
+                    </div>
+                </form>
+                <div class="col-md-12 col-lg-9 order-lg-2 order-1 col-sm-12 col-xs-12 smt-30">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                            <div class="producy__view__container">
+                                <!-- Start Short Form -->
+                                <div class="product__list__option">
+                                    <div class="order-single-btn">
+                                        <select class="select-color selectpicker">
+                                            <option>Sort by newness</option>
+                                            <option>Match</option>
+                                            <option>Updated</option>
+                                            <option>Title</option>
+                                            <option>Category</option>
+                                            <option>Rating</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- End Short Form -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-contet shop__grid__view__wrap">
+                        <!-- Start Single View -->
+                        <div role="tabpanel" id="grid-view" class="row single-grid-view tab-pane  active clearfix">
+                            @foreach (var item in Model.Products)
+                            {
+                                <!-- Start Single Product -->
+                                <div class="col-md-4 col-lg-4 col-sm-12">
+                                    <div class="product">
+                                        <div class="product__inner">
+                                            <div class="pro__thumb">
+                                                <a href="#">
+                                                    <img src="~/imgs/products/@item.CoverImage" alt="product images">
+                                                </a>
+                                            </div>
+                                            <div class="product__hover__info">
+                                                <ul class="product__action">
+                                                    <li><a title="Add To Cart" asp-action="AddBasket" asp-controller="Shop" asp-route-id="@item.Id" ><span class="ti-shopping-cart"></span></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="add__to__wishlist">
+                                                <a data-bs-toggle="tooltip" title="Add To Wishlist" class="add-to-cart" href="wishlist.html"><span class="ti-heart"></span></a>
+                                            </div>
+                                        </div>
+                                        <div class="product__details">
+                                            <h2><a href="product-details.html">@item.Name</a></h2>
+                                            <ul class="product__price">
+                                                <li class="old__price">$@item.SellPrice</li>
+                                                <li class="new__price">$@(item.SellPrice - item.SellPrice * item.Discount / 100)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Single Product -->
+                            }
+                        </div>
+                        <!-- End Single View -->
+                        <!-- Start Single View -->
+                        <div role="tabpanel" id="list-view" class="single-grid-view tab-pane clearfix">
+                            <!-- Start List Content-->
+                            <div class="row single__list__content clearfix">
+                                <div class="col-md-4 col-lg-4 col-sm-12">
+                                    <div class="list__thumb">
+                                        <a href="product-details.html">
+                                            <img src="~/assets/images/product/1.png" alt="list images">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-sm-12">
+                                    <div class="list__details__inner">
+                                        <h2><a href="product-details.html">Ninja Silhouette</a></h2>
+                                        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet…</p>
+                                        <span class="product__price">$15.00</span>
+                                        <div class="shop__btn">
+                                            <a class="htc__btn" href="cart.html"><span class="ti-shopping-cart"></span>Add to Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End List Content-->
+                            <!-- Start List Content-->
+                            <div class="row single__list__content clearfix">
+                                <div class="col-md-4 col-lg-4 col-sm-12">
+                                    <div class="list__thumb">
+                                        <a href="product-details.html">
+                                            <img src="~/assets/images/product/2.png" alt="list images">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-sm-12">
+                                    <div class="list__details__inner">
+                                        <h2><a href="product-details.html">Ninja Silhouette</a></h2>
+                                        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet…</p>
+                                        <span class="product__price">$15.00</span>
+                                        <div class="shop__btn">
+                                            <a class="htc__btn" href="cart.html"><span class="ti-shopping-cart"></span>Add to Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End List Content-->
+                            <!-- Start List Content-->
+                            <div class="row single__list__content clearfix">
+                                <div class="col-md-4 col-lg-4 col-sm-12">
+                                    <div class="list__thumb">
+                                        <a href="product-details.html">
+                                            <img src="~/assets/images/product/3.png" alt="list images">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-sm-12">
+                                    <div class="list__details__inner">
+                                        <h2><a href="product-details.html">Ninja Silhouette</a></h2>
+                                        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet…</p>
+                                        <span class="product__price">$15.00</span>
+                                        <div class="shop__btn">
+                                            <a class="htc__btn" href="cart.html"><span class="ti-shopping-cart"></span>Add to Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End List Content-->
+                            <!-- Start List Content-->
+                            <div class="row single__list__content clearfix">
+                                <div class="col-md-4 col-lg-4 col-sm-12">
+                                    <div class="list__thumb">
+                                        <a href="product-details.html">
+                                            <img src="~/assets/images/product/4.png" alt="list images">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-sm-12">
+                                    <div class="list__details__inner">
+                                        <h2><a href="product-details.html">Ninja Silhouette</a></h2>
+                                        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet…</p>
+                                        <span class="product__price">$15.00</span>
+                                        <div class="shop__btn">
+                                            <a class="htc__btn" href="cart.html"><span class="ti-shopping-cart"></span>Add to Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End List Content-->
+                            <!-- Start List Content-->
+                            <div class="row single__list__content clearfix">
+                                <div class="col-md-4 col-lg-4 col-sm-12">
+                                    <div class="list__thumb">
+                                        <a href="product-details.html">
+                                            <img src="~/assets/images/product/5.png" alt="list images">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-sm-12">
+                                    <div class="list__details__inner">
+                                        <h2><a href="product-details.html">Ninja Silhouette</a></h2>
+                                        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet…</p>
+                                        <span class="product__price">$15.00</span>
+                                        <div class="shop__btn">
+                                            <a class="htc__btn" href="cart.html"><span class="ti-shopping-cart"></span>Add to Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End List Content-->
+                            <!-- Start List Content-->
+                            <div class="row single__list__content clearfix">
+                                <div class="col-md-4 col-lg-4 col-sm-12">
+                                    <div class="list__thumb">
+                                        <a href="product-details.html">
+                                            <img src="~/assets/images/product/6.png" alt="list images">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-sm-12">
+                                    <div class="list__details__inner">
+                                        <h2><a href="product-details.html">Ninja Silhouette</a></h2>
+                                        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet…</p>
+                                        <span class="product__price">$15.00</span>
+                                        <div class="shop__btn">
+                                            <a class="htc__btn" href="cart.html"><span class="ti-shopping-cart"></span>Add to Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End List Content-->
+                        </div>
+                        <!-- End Single View -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Our ShopSide Area -->
+    <!-- Start Footer Area -->
+    <!-- End Footer Area -->
+</div>
+<!-- Body main wrapper end -->
+<!-- QUICKVIEW PRODUCT -->
+<div id="quickview-wrapper">
+    <!-- Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal__container" role="document">
+            <div class="modal-content">
+                
+                <div class="modal-body">
+                    <div class="modal-product">
+                        <!-- Start product images -->
+                        <div class="product-images">
+                            <div class="main-image images">
+                                <img alt="big images" src="~/assets/images/product/big-img/1.jpg">
+                            </div>
+                        </div>
+                        <!-- end product images -->
+                        <div class="product-info">
+                            <h1>Simple Fabric Bags</h1>
+                            <div class="rating__and__review">
+                                <ul class="rating">
+                                    <li><span class="ti-star"></span></li>
+                                    <li><span class="ti-star"></span></li>
+                                    <li><span class="ti-star"></span></li>
+                                    <li><span class="ti-star"></span></li>
+                                    <li><span class="ti-star"></span></li>
+                                </ul>
+                                <div class="review">
+                                    <a href="#">4 customer reviews</a>
+                                </div>
+                            </div>
+                            <div class="price-box-3">
+                                <div class="s-price-box">
+                                    <span class="new-price">$17.20</span>
+                                    <span class="old-price">$45.00</span>
+                                </div>
+                            </div>
+                            <div class="quick-desc">
+                                Designed for simplicity and made from high quality materials. Its sleek geometry and material combinations creates a modern look.
+                            </div>
+                            <div class="select__color">
+                                <h2>Select color</h2>
+                                <ul class="color__list">
+                                    <li class="red"><a title="Red" href="#">Red</a></li>
+                                    <li class="gold"><a title="Gold" href="#">Gold</a></li>
+                                    <li class="orange"><a title="Orange" href="#">Orange</a></li>
+                                    <li class="orange"><a title="Orange" href="#">Orange</a></li>
+                                </ul>
+                            </div>
+                            <div class="select__size">
+                                <h2>Select size</h2>
+                                <ul class="color__list">
+                                    <li class="l__size"><a title="L" href="#">L</a></li>
+                                    <li class="m__size"><a title="M" href="#">M</a></li>
+                                    <li class="s__size"><a title="S" href="#">S</a></li>
+                                    <li class="xl__size"><a title="XL" href="#">XL</a></li>
+                                    <li class="xxl__size"><a title="XXL" href="#">XXL</a></li>
+                                </ul>
+                            </div>
+                            <div class="social-sharing">
+                                <div class="widget widget_socialsharing_widget">
+                                    <h3 class="widget-title-modal">Share this product</h3>
+                                    <ul class="social-icons">
+                                        <li><a target="_blank" title="rss" href="#" class="rss social-icon"><i class="zmdi zmdi-rss"></i></a></li>
+                                        <li><a target="_blank" title="Linkedin" href="#" class="linkedin social-icon"><i class="zmdi zmdi-linkedin"></i></a></li>
+                                        <li><a target="_blank" title="Pinterest" href="#" class="pinterest social-icon"><i class="zmdi zmdi-pinterest"></i></a></li>
+                                        <li><a target="_blank" title="Tumblr" href="#" class="tumblr social-icon"><i class="zmdi zmdi-tumblr"></i></a></li>
+                                        <li><a target="_blank" title="Pinterest" href="#" class="pinterest social-icon"><i class="zmdi zmdi-pinterest"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="addtocart-btn">
+                                <a href="#">Add to cart</a>
+                            </div>
+                        </div><!-- .product-info -->
+                    </div><!-- .modal-product -->
+                </div><!-- .modal-body -->
+            </div><!-- .modal-content -->
+        </div><!-- .modal-dialog -->
+    </div>
+    <!-- END Modal -->
+</div>
+<!-- END QUICKVIEW PRODUCT -->
+<!-- Placed js at the end of the document so the pages load faster -->
+<!-- jquery latest version -->
+<script src="~/assets/js/vendor/jquery-3.6.0.min.js"></script>
+<script src="~/assets/js/vendor/jquery-migrate-3.3.2.min.js"></script>
+<script src="~/assets/js/vendor/jquery.waypoints.js"></script>
+<!-- Bootstrap Framework js -->
+<script src="~/assets/js/bootstrap.bundle.min.js"></script>
+<!-- All js plugins included in this file. -->
+<script src="~/assets/js/plugins.js"></script>
+<!-- Main js file that contents all jQuery plugins activation. -->
+<script src="~/assets/js/main.js"></script>

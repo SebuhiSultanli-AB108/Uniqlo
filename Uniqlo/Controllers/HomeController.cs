@@ -16,7 +16,7 @@ namespace Uniqlo.Controllers
             {
                 ImageUrl = s.ImageUrl,
                 Link = s.Link,
-                Subtitle = s.Title,
+                Subtitle = s.Subtitle,
                 Title = s.Title,
             }).ToListAsync();
             vm.Products = await _context.Products.Select(p => new ProductListItemVM

@@ -1,11 +1,11 @@
-﻿@model HomeVM
+﻿@model HomeVM 
 @{
     ViewData["Title"] = "Home";
 }
     <!-- Start Slider Area -->
     <div class="slider__container slider--four">
         <div class="slider__activation__wrap owl-carousel owl-theme">
-            @foreach (var item in Model.Sliders)
+             @foreach (var item in Model.Sliders)
         {
             
                 <!-- Start Single Slide -->
@@ -147,4 +147,3 @@
                         </div>
                     </div>
                     <!-- End Filter Menu -->
-                   

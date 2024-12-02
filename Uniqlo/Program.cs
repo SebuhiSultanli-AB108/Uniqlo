@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Uniqlo.Context;
+using Uniqlo.Models;
 
 namespace Uniqlo
 {
@@ -15,7 +17,18 @@ namespace Uniqlo
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("MSSQL"));
             });
-
+            builder.Services.AddIdentity<User, IdentityRole>(opt =>
+            {
+                opt.User.RequireUniqueEmail = true;
+                opt.Password.RequiredLength = 3;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Lockout.MaxFailedAccessAttempts = 1;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(100);
+            })
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<UniqloDbContest>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

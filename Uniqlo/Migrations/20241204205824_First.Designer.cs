@@ -12,8 +12,8 @@ using Uniqlo.Context;
 namespace Uniqlo.Migrations
 {
     [DbContext(typeof(UniqloDbContest))]
-    [Migration("20241202214020_CreateIdentity")]
-    partial class CreateIdentity
+    [Migration("20241204205824_First")]
+    partial class First
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Uniqlo.Context;
 using Uniqlo.Models;
 using Uniqlo.ViewModels.Brands;
+using Uniqlo.Views.Account.Enums;
 
 namespace Uniqlo.Areas.Admin.Controllers;
 
-[Area("Admin")]
-public class BrandController(UniqloDbContest _context) : Controller
+[Area("Admin"), Authorize(Roles = nameof(Roles.Admin))]
+public class BrandController(UniqloDbContext _context) : Controller
 {
     public async Task<IActionResult> Index() { return View(await _context.Brands.ToListAsync()); }
     public IActionResult Create() { return View(); }

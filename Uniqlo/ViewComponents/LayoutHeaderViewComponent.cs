@@ -6,7 +6,7 @@ using Uniqlo.ViewModels.Basket;
 
 namespace Uniqlo.ViewComponents
 {
-    public class LayoutHeaderViewComponent(UniqloDbContest _context) : ViewComponent
+    public class LayoutHeaderViewComponent(UniqloDbContext _context) : ViewComponent
     {
         public async Task<IViewComponentResult> InvokeAsync()
         {

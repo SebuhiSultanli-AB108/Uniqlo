@@ -7,7 +7,7 @@ using Uniqlo.ViewModels.Sliders;
 
 namespace Uniqlo.Controllers
 {
-    public class HomeController(UniqloDbContest _context) : Controller
+    public class HomeController(UniqloDbContext _context) : Controller
     {
         public async Task<IActionResult> Index()
         {
@@ -39,6 +39,10 @@ namespace Uniqlo.Controllers
             return View();
         }
         public IActionResult Shop()
+        {
+            return View();
+        }
+        public IActionResult AccessDenied()
         {
             return View();
         }

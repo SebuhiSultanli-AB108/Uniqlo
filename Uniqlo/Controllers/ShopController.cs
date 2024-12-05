@@ -6,11 +6,12 @@ using Uniqlo.ViewModels.Brands;
 using Uniqlo.ViewModels.Products;
 using Uniqlo.ViewModels.Shops;
 using System.Text.Json;
+using System.Security.Claims;
 
 
 namespace Uniqlo.Controllers;
 
-public class ShopController(UniqloDbContest _context) : Controller
+public class ShopController(UniqloDbContext _context) : Controller
 {
     public async Task<IActionResult> Index(int? brandId, string amount)
     {
@@ -59,6 +60,26 @@ public class ShopController(UniqloDbContest _context) : Controller
         string data = JsonSerializer.Serialize(basket);
         HttpContext.Response.Cookies.Append("basket", data);
         return Ok();
+    }
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (!id.HasValue) return BadRequest();
+        var data = await _context.Products
+            .Include(x => x.Images)
+            .Include(x => x.ProductRating)
+            .Where(x => x.Id == id.Value && !x.IsDeleted).FirstOrDefaultAsync();
+        if (data is null) return NotFound();
+        string? userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (userId is not null)
+        {
+            var rating = await _context.productRatings.Where(x => x.UserId == userId && x.ProductId == id).Select(x => x.RatingRate).FirstOrDefaultAsync();
+            ViewBag.Rating = rating == 0 ? 5 : rating;
+        }
+        else
+        {
+            ViewBag.Rating = 5;
+        }
+        return View(data);
     }
     public async Task<IActionResult> GetBasket()
     {

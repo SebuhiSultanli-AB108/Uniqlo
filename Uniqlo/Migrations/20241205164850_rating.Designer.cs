@@ -12,8 +12,8 @@ using Uniqlo.Context;
 namespace Uniqlo.Migrations
 {
     [DbContext(typeof(UniqloDbContext))]
-    [Migration("20241204205824_First")]
-    partial class First
+    [Migration("20241205164850_rating")]
+    partial class rating
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -254,6 +254,32 @@ namespace Uniqlo.Migrations
                     b.ToTable("ProductImage");
                 });
 
+            modelBuilder.Entity("Uniqlo.Models.ProductRating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RatingRate")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("productRatings");
+                });
+
             modelBuilder.Entity("Uniqlo.Models.Slider", b =>
                 {
                     b.Property<int>("Id")
@@ -432,6 +458,21 @@ namespace Uniqlo.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Uniqlo.Models.ProductRating", b =>
+                {
+                    b.HasOne("Uniqlo.Models.Product", "Product")
+                        .WithMany("ProductRating")
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("Uniqlo.Models.User", "User")
+                        .WithMany("ProductRating")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Uniqlo.Models.Brand", b =>
                 {
                     b.Navigation("Products");
@@ -440,6 +481,13 @@ namespace Uniqlo.Migrations
             modelBuilder.Entity("Uniqlo.Models.Product", b =>
                 {
                     b.Navigation("Images");
+
+                    b.Navigation("ProductRating");
+                });
+
+            modelBuilder.Entity("Uniqlo.Models.User", b =>
+                {
+                    b.Navigation("ProductRating");
                 });
 #pragma warning restore 612, 618
         }

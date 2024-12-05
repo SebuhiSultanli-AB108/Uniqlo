@@ -4,10 +4,11 @@ using Uniqlo.Models;
 
 namespace Uniqlo.Context;
 
-public class UniqloDbContest : IdentityDbContext<User>
+public class UniqloDbContext : IdentityDbContext<User>
 {
     public DbSet<Slider> Sliders { get; set; }
     public DbSet<Brand> Brands { get; set; }
     public DbSet<Product> Products { get; set; }
-    public UniqloDbContest(DbContextOptions opt) : base(opt) { }
+    public DbSet<ProductRating> productRatings { get; set; }
+    public UniqloDbContext(DbContextOptions opt) : base(opt) { }
 }

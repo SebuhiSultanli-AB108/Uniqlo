@@ -1,18 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Uniqlo.Context;
 using Uniqlo.Extensions;
 using Uniqlo.Models;
 using Uniqlo.ViewModels.Products;
+using Uniqlo.Views.Account.Enums;
 
 namespace Uniqlo.Areas.Admin.Controllers;
 
-[Area("Admin")]
-public class ProductController(IWebHostEnvironment _env, UniqloDbContest _context) : Controller
+[Area("Admin"), Authorize(Roles = nameof(Roles.Admin))]
+public class ProductController(IWebHostEnvironment _env, UniqloDbContext _context) : Controller
 {
     int fileMaxSize = 400;
 
-    public async Task<IActionResult> IndexAsync()
+    public async Task<IActionResult> Index()
     {
         return View(await _context.Products
             .Include(p => p.Brand)
@@ -78,7 +80,7 @@ public class ProductController(IWebHostEnvironment _env, UniqloDbContest _contex
         }).ToList();
         await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(IndexAsync));
+        return RedirectToAction(nameof(Index));
     }
     [HttpPost]
     public async Task<IActionResult> Update(ProductCreateVM vm, int id)

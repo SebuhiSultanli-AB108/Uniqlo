@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Uniqlo.Context;
+using Uniqlo.Extensions;
 using Uniqlo.Models;
 
 namespace Uniqlo
@@ -13,24 +14,30 @@ namespace Uniqlo
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<UniqloDbContest>(opt =>
+            builder.Services.AddDbContext<UniqloDbContext>(opt =>
             {
-                opt.UseSqlServer(builder.Configuration.GetConnectionString("Lab"));
+                opt.UseSqlServer(builder.Configuration.GetConnectionString("MSSql"));
             });
             builder.Services.AddIdentity<User, IdentityRole>(opt =>
             {
-                opt.User.RequireUniqueEmail = true;
+                opt.User.RequireUniqueEmail = false;
                 opt.Password.RequiredLength = 3;
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireLowercase = false;
                 opt.Password.RequireUppercase = false;
-                opt.Lockout.MaxFailedAccessAttempts = 1;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Lockout.MaxFailedAccessAttempts = 3;
                 opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(100);
             })
                 .AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<UniqloDbContest>();
-            var app = builder.Build();
+                .AddEntityFrameworkStores<UniqloDbContext>();
 
+            builder.Services.ConfigureApplicationCookie(opt =>
+            {
+                opt.LoginPath = "/login";
+                opt.AccessDeniedPath = "/Home/AccessDenied";
+            });
+            var app = builder.Build();
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -41,11 +48,26 @@ namespace Uniqlo
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
+            app.UseAuthorization();
+            app.UseUserSeed();
 
             //app.UseAuthorization();
 
+            app.MapControllerRoute(
+                name: "login",
+                pattern: "login", new
+                {
+                    Controller = "Account",
+                    Action = "Login"
+                });
+            app.MapControllerRoute(
+                name: "register",
+                pattern: "register", new
+                {
+                    Controller = "Account",
+                    Action = "Register"
+                });
             app.MapControllerRoute(
                 name: "area",
                 pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");

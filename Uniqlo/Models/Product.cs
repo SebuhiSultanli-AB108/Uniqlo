@@ -20,4 +20,5 @@ public class Product : BaseEntity
     public int? BrandId { get; set; }
     public Brand Brand { get; set; }
     public ICollection<ProductImage>? Images { get; set; }
+    public ICollection<ProductRating>? ProductRating { get; set; }
 }

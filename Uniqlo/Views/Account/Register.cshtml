@@ -21,15 +21,15 @@
                     <!-- Start Single Content -->
                     <div id="register" class="single__tabs__panel tab-pane active show">
                         <form class="login" method="post">
-                            <input asp-for="Fullname" placeholder="Name*">
+                            <input asp-for="Fullname" placeholder="Fullname">
                             <span asp-validation-for="Fullname" class="text-danger"></span>
-                            <input asp-for="Username" placeholder="Username*">
+                            <input asp-for="Username" placeholder="Username">
                             <span asp-validation-for="Username" class="text-danger"></span>
                             <input asp-for="Email" placeholder="Email*">
                             <span asp-validation-for="Email" class="text-danger"></span>
-                            <input asp-for="Password" placeholder="Password*">
+                            <input asp-for="Password" placeholder="Password">
                             <span asp-validation-for="Password" class="text-danger"></span>
-                            <input asp-for="RePassword" placeholder="Password*">
+                            <input asp-for="RePassword" placeholder="RePassword">
                             <span asp-validation-for="RePassword" class="text-danger"></span>
                             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                             <div class="htc__login__btn">

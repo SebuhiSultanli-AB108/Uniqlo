@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Uniqlo.Context;
+using Uniqlo.Extensions;
 using Uniqlo.Models;
 using Uniqlo.ViewModels.Sliders;
 
@@ -9,21 +10,12 @@ namespace Uniqlo.Areas.Admin.Controllers;
 [Area("Admin")]
 public class SliderController(UniqloDbContest _context, IWebHostEnvironment _env) : Controller
 {
-    public async Task<IActionResult> Index()
-    {
-        return View(await _context.Sliders.ToListAsync());
-    }
-    public IActionResult Create()
-    {
-        return View();
-    }
-    public IActionResult Update()
-    {
-        return View();
-    }
+    public async Task<IActionResult> Index() { return View(await _context.Sliders.ToListAsync()); }
+    public IActionResult Create() { return View(); }
+    public IActionResult Update() { return View(); }
 
     [HttpPost]
-    public async Task<IActionResult> CreateAsync(SliderCreateVM vm)
+    public async Task<IActionResult> Create(SliderCreateVM vm)
     {
         if (!ModelState.IsValid) return View(vm);
         if (!vm.File.ContentType.StartsWith("image"))
@@ -52,10 +44,32 @@ public class SliderController(UniqloDbContest _context, IWebHostEnvironment _env
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
+    public async Task<IActionResult> Delete(int id)
+    {
+        Slider target = await _context.Sliders.FindAsync(id);
+        if (!target.IsDeleted)
+        {
+            target.IsDeleted = true;
+            _context.Sliders.Update(target);
+        }
+        else
+        {
+            _context.Sliders.Remove(target);
+        }
+        await _context.SaveChangesAsync();
+        return RedirectToAction("");
+    }
+    [HttpPost]
+    public async Task<IActionResult> Update(SliderCreateVM vm, int id)
+    {
+        if (!ModelState.IsValid) return View(vm);
+        Slider slider = await _context.Sliders.FindAsync(id);
+        slider.Title = vm.Title;
+        slider.Subtitle = vm.Subtitle;
+        slider.Link = vm.Link;
+        slider.ImageUrl = await vm.File!.UploadAsync(_env.WebRootPath, "imgs", "sliders");
+        _context.Sliders.Update(slider);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
 }
-/*
-Admin paneldə Slider table-ında Update, Delete, Hide (Show) actionları yazdıq.
-Update slider məlumatlarını yeniləmək üçün, Delete slideri databazadan, sliderin şəkilini isə qovluqdan silmək üçündür, Hide isə slider-in IsDeleted sütununu dəyişdirir.
-Əgər IsDeleted true-dırsa şəkili qovluqdan və ya databazadan silmirsiz sadəcə olaraq istifadəçi həmin slide-ı görmür.
-Admin yenidən Show  düyməsinə kliklədiyi zaman artıq istifadəçiyə görünür olur.
-*/

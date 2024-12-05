@@ -15,7 +15,7 @@ namespace Uniqlo
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<UniqloDbContest>(opt =>
             {
-                opt.UseSqlServer(builder.Configuration.GetConnectionString("MSSQL"));
+                opt.UseSqlServer(builder.Configuration.GetConnectionString("Lab"));
             });
             builder.Services.AddIdentity<User, IdentityRole>(opt =>
             {

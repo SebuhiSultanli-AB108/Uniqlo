@@ -78,7 +78,7 @@ public class ProductController(IWebHostEnvironment _env, UniqloDbContest _contex
         }).ToList();
         await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Create));
+        return RedirectToAction(nameof(IndexAsync));
     }
     [HttpPost]
     public async Task<IActionResult> Update(ProductCreateVM vm, int id)

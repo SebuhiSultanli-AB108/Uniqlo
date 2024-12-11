@@ -33,6 +33,7 @@ public static class SeedExtension
             user.UserName = "admin";
             user.Fullname = "admin";
             user.Email = "admin@gmail.com";
+            user.EmailConfirmed = true;
             string role = nameof(Roles.Admin);
             await _userManager.CreateAsync(user, "123");
             await _userManager.AddToRoleAsync(user, role);

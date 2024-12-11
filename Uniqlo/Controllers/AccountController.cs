@@ -21,6 +21,29 @@ namespace Uniqlo.Controllers
             if (isAuthenticated) return RedirectToAction("Index", "Home");
             return View();
         }
+        public IActionResult Login()
+        {
+            if (isAuthenticated) return RedirectToAction("Index", "Home");
+            return View();
+        }
+        public IActionResult UpdatePassword()
+        {
+            if (!isAuthenticated) return RedirectToAction("Index", "Home");
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePassword(ResetPasswordVM vm)
+        {
+            if (!isAuthenticated) return RedirectToAction("Index", "Home");
+            if (!ModelState.IsValid) return View();
+            User user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            user.EmailConfirmed = true;
+            string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            _emailService.SendEmailConfirmation(user.Email, user.UserName, token);
+            await _userManager.ResetPasswordAsync(user, token, vm.Password);
+            return Content("Please verify the email address!");
+        }
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM vm)
@@ -55,12 +78,6 @@ namespace Uniqlo.Controllers
             _emailService.SendEmailConfirmation(user.Email, user.UserName, token);
             return Content("Please verify the email address!");
         }
-        public IActionResult Login()
-        {
-            if (isAuthenticated) return RedirectToAction("Index", "Home");
-            return View();
-        }
-
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM vm, string? returnUrl = null)
         {

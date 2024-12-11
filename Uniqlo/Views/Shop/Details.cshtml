@@ -58,14 +58,21 @@
                         </form>
                     }
                     <div class="pro__dtl__rating">
-                        
+
                         <ul class="pro__rating">
-                            @for (int i = 0; i < Math.Ceiling(Model.ProductRating.Average(x => x.RatingRate)); i++)
+                            @if (Model.ProductRating.Count == 0)
+                            { 
+                                <p class="text-danger">No rating!</p>
+                            }
+                            else
                             {
-                                <li><span class="ti-star"></span></li>
+                                @for (int i = 0; i < Math.Ceiling(Model.ProductRating.Average(x => x.RatingRate)); i++)
+                                {
+                                    <li><span class="ti-star"></span></li>
+                                } 
+                                <span style="margin-left: 15px;" class="rat__qun">(Based on @Model.ProductRating.Count Ratings)</span>
                             }
                         </ul>
-                        <span class="rat__qun">(Based on @Model.ProductRating.Count Ratings)</span>
                     </div>
                     <div class="pro__details">
                         <p>@Model.Description</p>

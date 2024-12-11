@@ -76,9 +76,8 @@ public class ShopController(UniqloDbContext _context) : Controller
             ViewBag.Rating = rating == 0 ? 5 : rating;
         }
         else
-        {
             ViewBag.Rating = 5;
-        }
+
         return View(data);
     }
     public async Task<IActionResult> GetBasket()

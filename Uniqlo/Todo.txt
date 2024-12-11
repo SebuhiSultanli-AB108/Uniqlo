@@ -1,0 +1,3 @@
+﻿1.User should be able to rate the product;
+2.Account dropdown
+3.Settings page 

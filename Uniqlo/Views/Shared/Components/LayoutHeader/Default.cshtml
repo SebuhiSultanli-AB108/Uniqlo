@@ -50,11 +50,11 @@
                             <ul class="menu-extra">
                                 @if (Context.User.Identity.IsAuthenticated)
                                 {
-                                    <li><a asp-action="Logout" asp-controller="Account"><span class="ti-shift-left"></span></a></li>
+                                <li><a asp-action="Logout" asp-controller="Account"><span class="fas fa-sign-out"></span></a></li>
                                 }
                                 else
                                 {
-                                    <li><a asp-action="Login" asp-controller="Account"><span class="ti-shift-right"></span></a></li>
+                                <li><a asp-action="Login" asp-controller="Account"><span class="fas fa-sign-in"></span></a></li>
                                 }
                                 <li class="cart__menu">
                                     <span class="ti-shopping-cart"></span>
@@ -62,7 +62,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="mobile-menu-area"></div>
+                @*<div class="mobile-menu-area"></div>*@
                 </div>
             </div>
             <!-- End Mainmenu Area -->

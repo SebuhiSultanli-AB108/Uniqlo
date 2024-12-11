@@ -11,26 +11,6 @@
         }
     </style>
 }
-<!-- Start Bradcaump area -->
-<div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(../assets/images/bg/2.jpg) no-repeat scroll center center / cover ;">
-    <div class="ht__bradcaump__wrap">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="bradcaump__inner text-center">
-                        <h2 class="bradcaump-title">Shop Sidebar</h2>
-                        <nav class="bradcaump-inner">
-                            <a class="breadcrumb-item" href="index.html">Home</a>
-                            <span class="brd-separetor">/</span>
-                            <span class="breadcrumb-item active">Shop Sidebar</span>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End Bradcaump area -->
 <!-- Start Our ShopSide Area -->
 <section class="htc__shop__sidebar bg__white ptb--120">
     <div class="container">
@@ -111,7 +91,7 @@
                             <div class="product">
                                 <div class="product__inner">
                                     <div class="pro__thumb">
-                                        <a href="#">
+                                        <a asp-action="Details" asp-controller="Shop" asp-route-id="@item.Id">
                                             <img src="~/imgs/products/@item.CoverImage" alt="product images">
                                         </a>
                                     </div>

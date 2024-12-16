@@ -1,6 +1,6 @@
-﻿@model Product
+﻿@model DeteailsVM
 @{
-    ViewData["Title"] = Model.Name;
+    ViewData["Title"] = Model.Product.Name;
     int img_tab = 2;
 }
 
@@ -15,10 +15,10 @@
                     <ul class="nav product__small__images" role="tablist">
                         <li role="presentation" class="pot-small-img">
                             <a class="active" href="#img-tab-1" role="tab" data-bs-toggle="tab">
-                                <img width="40px" src="~/imgs/products/@Model.CoverImage" alt="small-image">
+                                <img width="40px" src="~/imgs/products/@Model.Product.CoverImage" alt="small-image">
                             </a>
                         </li>
-                        @foreach (var item in Model.Images?.Select(x=> x.ImageUrl) ?? [])
+                        @foreach (var item in Model.Product.Images?.Select(x=> x.ImageUrl) ?? [])
                         {
                             <li role="presentation" class="pot-small-img">
                                 <a class="active" href="#img-tab-@(img_tab++)" role="tab" data-bs-toggle="tab">
@@ -31,10 +31,10 @@
                     <div class="product__big__images">
                         <div class="portfolio-full-image tab-content">
                             <div role="tabpanel" class="tab-pane active salam" id="img-tab-1">
-                                <img width="480px" src="~/imgs/products/@Model.CoverImage" alt="full-image">
+                                <img width="480px" src="~/imgs/products/@Model.Product.CoverImage" alt="full-image">
                             </div>
                             @{img_tab = 2;}
-                            @foreach (var item in Model.Images?.Select(x => x.ImageUrl) ?? [])
+                            @foreach (var item in Model.Product.Images?.Select(x => x.ImageUrl) ?? [])
                             {
                                 <div role="tabpanel" class="tab-pane" id="img-tab-@(img_tab++)">
                                     <img src="~/imgs/products/@item" alt="full-image">
@@ -47,12 +47,12 @@
             <div class="col-md-12 col-lg-6 col-sm-12 smt-30 xmt-30">
                 <div class="htc__product__details__inner">
                     <div class="pro__detl__title">
-                        <h2>@Model.Name</h2>
+                        <h2>@Model.Product.Name</h2>
                     </div>
                     @if (User.Identity?.IsAuthenticated ?? false)
                     {
                         <form asp-action="Rate">
-                            <input type="hidden" name="productId" value="@Model.Id" />
+                            <input type="hidden" name="productId" value="@Model.Product.Id" />
                             <input type="number" name="rate" min="1" max="5" value="@ViewBag.Rating"/> <button class="btn">Rate</button>
 
                         </form>
@@ -60,32 +60,32 @@
                     <div class="pro__dtl__rating">
 
                         <ul class="pro__rating">
-                            @if (Model.ProductRating.Count == 0)
+                            @if (Model.Product.ProductRating.Count == 0)
                             { 
                                 <p class="text-danger">No rating!</p>
                             }
                             else
                             {
-                                @for (int i = 0; i < Math.Ceiling(Model.ProductRating.Average(x => x.RatingRate)); i++)
+                                @for (int i = 0; i < Math.Ceiling(Model.Product.ProductRating.Average(x => x.RatingRate)); i++)
                                 {
                                     <li><span class="ti-star"></span></li>
                                 } 
-                                <span style="margin-left: 15px;" class="rat__qun">(Based on @Model.ProductRating.Count Ratings)</span>
+                                <span style="margin-left: 15px;" class="rat__qun">(Based on @Model.Product.ProductRating.Count Ratings)</span>
                             }
                         </ul>
                     </div>
                     <div class="pro__details">
-                        <p>@Model.Description</p>
+                        <p>@Model.Product.Description</p>
                     </div>
                     <ul class="pro__dtl__prize">
-                        @if (Model.Discount > 0)
+                        @if (Model.Product.Discount > 0)
                         {
-                            <li class="old__prize">$@Model.SellPrice</li>
-                            <li>$@(Model.SellPrice * (100 - Model.Discount) / 100)</li>
+                            <li class="old__prize">$@Model.Product.SellPrice</li>
+                            <li>$@(Model.Product.SellPrice * (100 - Model.Product.Discount) / 100)</li>
                         }
                         else
                         {
-                            <li>$@Model.SellPrice</li>
+                            <li>$@Model.Product.SellPrice</li>
                         }
                     </ul>
                     <div class="product-action-wrap">
@@ -107,6 +107,21 @@
                     </ul>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="container">
+        <form method="post" asp-action="AddComment" asp-controller="Shop" asp-route-id="@Model.Product.Id">
+            <input type="text" id="commentInput" name="description" placeholder="Add a comment" class="form-control">
+            <button type="submit" class="btn btn-danger">Add Comment</button>
+        </form>
+        <div style="margin-top: 5%">
+            @foreach (var item in Model.Comments)
+            {
+                <p>@item.CreatedTime</p>
+                <span>@item.UserName:</span>
+                <span>@item.Description</span>
+                <hr/>
+            }
         </div>
     </div>
 </section>

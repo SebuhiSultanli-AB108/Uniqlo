@@ -7,11 +7,13 @@ using Uniqlo.ViewModels.Products;
 using Uniqlo.ViewModels.Shops;
 using System.Text.Json;
 using System.Security.Claims;
+using Uniqlo.Models;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace Uniqlo.Controllers;
 
-public class ShopController(UniqloDbContext _context) : Controller
+public class ShopController(UniqloDbContext _context, UserManager<User> _userManager) : Controller
 {
     public async Task<IActionResult> Index(int? brandId, string amount)
     {
@@ -47,7 +49,10 @@ public class ShopController(UniqloDbContext _context) : Controller
             }).ToListAsync();
         return View(vm);
     }
-
+    public IActionResult CommentPage()
+    {
+        return View();
+    }
     public async Task<IActionResult> AddBasket(int id)
     {
         var basket = getBasket();
@@ -59,7 +64,50 @@ public class ShopController(UniqloDbContext _context) : Controller
 
         string data = JsonSerializer.Serialize(basket);
         HttpContext.Response.Cookies.Append("basket", data);
-        return Ok();
+        return RedirectToAction(nameof(Index));
+    }
+    public async Task<IActionResult> RemoveBasket(int id)
+    {
+        var basket = getBasket();
+        basket.Remove(basket.FirstOrDefault(x => x.Id == id));
+        string data = JsonSerializer.Serialize(basket);
+        HttpContext.Response.Cookies.Append("basket", data);
+        return RedirectToAction(nameof(Index));
+    }
+    public async Task<IActionResult> GetBasket()
+    {
+        return Json(getBasket());
+    }
+    public async Task<IActionResult> AddComment(int id, string description)
+    {
+        if (!ModelState.IsValid) return View();
+        User user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+        CommentItem comment = new CommentItem
+        {
+            UserName = user.UserName,
+            UserId = user.Id,
+            Description = description,
+            CreatedTime = DateTime.Now,
+            ProductId = _context.Products.FirstOrDefault(x => x.Id == id).Id,
+        };
+        await _context.CommentItems.AddAsync(comment);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+    public async Task<IActionResult> RemoveComment(int id)
+    {
+        CommentItem target = await _context.CommentItems.FindAsync(id);
+        if (!target.IsDeleted)
+        {
+            target.IsDeleted = true;
+            _context.CommentItems.Update(target);
+        }
+        else
+        {
+            _context.CommentItems.Remove(target);
+        }
+        await _context.SaveChangesAsync();
+        return RedirectToAction("");
     }
     public async Task<IActionResult> Details(int? id)
     {
@@ -77,12 +125,10 @@ public class ShopController(UniqloDbContext _context) : Controller
         }
         else
             ViewBag.Rating = 5;
-
-        return View(data);
-    }
-    public async Task<IActionResult> GetBasket()
-    {
-        return Json(getBasket());
+        DeteailsVM vm = new DeteailsVM();
+        vm.Product = data;
+        vm.Comments = await _context.CommentItems.ToListAsync();
+        return View(vm);
     }
     List<CookieItemVM> getBasket()
     {

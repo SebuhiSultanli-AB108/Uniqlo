@@ -93,7 +93,7 @@
                             <span class="shp__price">$@item.SellPrice</span>
                         </div>
                         <div class="remove__btn">
-                            <a href="#" title="Remove this item"><i class="zmdi zmdi-close"></i></a>
+                            <a asp-controller="Shop" asp-action="RemoveBasket" asp-route-id="@item.Id" title="Remove this item"><i class="zmdi zmdi-close"></i></a>
                         </div>
                     </div>
                 }
